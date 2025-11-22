@@ -23,7 +23,7 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary to-background flex items-center justify-center p-4">
+    <div className="min-h-screen from-secondary to-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo/Header */}
         <div className="text-center mb-12">
@@ -112,42 +112,15 @@ export default function Page() {
             >
               {isLoading ? "Entrando..." : "Entrar"}
             </Button>
-
-            {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-muted-foreground">Ou</span>
-              </div>
-            </div>
-
-            {/* Additional Options */}
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full text-foreground border-border hover:bg-secondary bg-transparent"
-            >
-              Entrar com Google
-            </Button>
           </form>
-
-          {/* Sign Up Link */}
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Não tem conta?{" "}
-            <a
-              href="#"
-              className="text-accent hover:text-primary font-medium transition-colors"
-            >
-              Registre-se aqui
-            </a>
-          </p>
         </Card>
 
         {/* Footer Info */}
         <div className="mt-8 text-center text-xs text-muted-foreground">
-          <p>© 2025 Pilates Studio. Todos os direitos reservados.</p>
+          <p>
+            © {new Date().getFullYear()} Pilates Studio. Todos os direitos
+            reservados.
+          </p>
         </div>
       </div>
     </div>

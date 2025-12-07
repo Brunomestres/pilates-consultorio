@@ -10,8 +10,9 @@ import { studios } from "./studios";
 import { relations } from "drizzle-orm";
 
 export const users = pgTable("users", {
-  user_d: uuid("user_d").defaultRandom().primaryKey(),
+  user_id: uuid("user_id").defaultRandom().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
+  password: varchar("password", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   phone: varchar("phone", { length: 20 }).notNull(),
   active: boolean("active").default(true).notNull(),

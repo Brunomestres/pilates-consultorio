@@ -6,7 +6,6 @@ export const signupSchema = z
     email: z.string().email("E-mail inválido"),
     phone: z.string().min(10, "Telefone inválido"),
     cpf_cnpj: z.string().min(11, "CPF/CNPJ inválido"),
-    birth_date: z.string().min(1, "Data de nascimento é obrigatória"),
     password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
     confirmPassword: z.string(),
     acceptTerms: z.boolean().refine((val) => val === true, {

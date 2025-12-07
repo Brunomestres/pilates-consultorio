@@ -30,7 +30,6 @@ export default function Page() {
       email: "",
       phone: "",
       cpf_cnpj: "",
-      birth_date: "",
       password: "",
       confirmPassword: "",
       acceptTerms: false,
@@ -130,25 +129,6 @@ export default function Page() {
                       <Input
                         type="text"
                         placeholder="000.000.000-00"
-                        className="bg-input border-border text-foreground placeholder:text-muted-foreground"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Birth Date Field */}
-              <FormField
-                control={form.control}
-                name="birth_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data de nascimento</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="date"
                         className="bg-input border-border text-foreground placeholder:text-muted-foreground"
                         {...field}
                       />

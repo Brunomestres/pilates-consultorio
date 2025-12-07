@@ -15,6 +15,13 @@
       "when": 1765136997156,
       "tag": "0001_smiling_james_howlett",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765138398287,
+      "tag": "0002_spicy_nightshade",
+      "breakpoints": true
     }
   ]
 }

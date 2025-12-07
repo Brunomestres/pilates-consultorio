@@ -4,7 +4,6 @@ import {
   varchar,
   boolean,
   timestamp,
-  date,
 } from "drizzle-orm/pg-core";
 import { studios } from "./studios";
 import { relations } from "drizzle-orm";
@@ -17,7 +16,6 @@ export const users = pgTable("users", {
   phone: varchar("phone", { length: 20 }).notNull(),
   active: boolean("active").default(true).notNull(),
   cpf_cnpj: varchar("cpf_cnpj", { length: 20 }).unique(),
-  birth_date: date("birth_date"),
   studio_id: uuid("studio_id")
     .references(() => studios.studio_id)
     .notNull(),

@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-
+import { credentials } from "better-auth-credentials-plugin";
 export const auth = betterAuth({
   session: {
     cookieCache: {
@@ -13,4 +13,18 @@ export const auth = betterAuth({
     storeStateStrategy: "cookie",
     storeAccountCookie: true,
   },
+  emailAndPassword: {
+    enabled: false,
+  },
+
+  plugins: [
+    credentials({
+      path: "/sign-in/external",
+      providerId: "external-api",
+      callback(ctx, parsed) {
+        console.log("Credentials plugin callback", { ctx, parsed });
+        return null;
+      },
+    }),
+  ],
 });

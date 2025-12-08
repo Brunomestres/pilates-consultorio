@@ -17,9 +17,10 @@ import {
 } from "@/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
 
 const signinSchema = z.object({
-  email: z.email("E-mail inválido"),
+  email: z.string().email("E-mail inválido"),
   password: z.string().min(1, "Senha é obrigatória"),
   rememberMe: z.boolean(),
 });
@@ -39,10 +40,11 @@ export default function Page() {
   });
 
   const onSubmit = async (data: SigninFormValues) => {
-    // Lógica de login será adicionada aqui
     console.log("Login:", data);
-    // Simular chamada de API
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await await authClient.signIn.external({
+      email: data.email,
+      password: data.password,
+    });
   };
 
   return (

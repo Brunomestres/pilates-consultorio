@@ -1,6 +1,18 @@
+import { db } from "../config/db/drizzle";
 import { betterAuth } from "better-auth";
-import { credentials } from "better-auth-credentials-plugin";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: "pg",
+  }),
+  user: {
+    additionalFields: {
+      studio_id: {
+        type: "string",
+        required: true,
+      },
+    },
+  },
   session: {
     cookieCache: {
       enabled: true,
@@ -14,17 +26,8 @@ export const auth = betterAuth({
     storeAccountCookie: true,
   },
   emailAndPassword: {
-    enabled: false,
+    enabled: true,
   },
 
-  plugins: [
-    credentials({
-      path: "/sign-in/external",
-      providerId: "external-api",
-      callback(ctx, parsed) {
-        console.log("Credentials plugin callback", { ctx, parsed });
-        return null;
-      },
-    }),
-  ],
+  plugins: [],
 });

@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
 const signinSchema = z.object({
@@ -41,10 +40,22 @@ export default function Page() {
 
   const onSubmit = async (data: SigninFormValues) => {
     console.log("Login:", data);
-    await await authClient.signIn.external({
+    await authClient.signIn.email({
       email: data.email,
       password: data.password,
     });
+  };
+
+  const register = async () => {
+    const { data, error } = await authClient.signUp.email({
+      name: "John Doe", // required
+      email: "john.doe2@example.com", // required
+      password: "password1234", // required
+      image: "https://example.com/image.png",
+      studio_id: "7b7dc001-1dc2-4bbb-bd51-72af55c107d1",
+      // callbackURL: "https://example.com/callback",
+    });
+    console.log("Register:", { data, error });
   };
 
   return (
@@ -163,12 +174,12 @@ export default function Page() {
           {/* Signup Link */}
           <div className="mt-6 text-center text-sm text-muted-foreground">
             Não tem uma conta?{" "}
-            <Link
-              href="/signup"
+            <Button
+              onClick={register}
               className="text-accent hover:text-primary font-medium transition-colors"
             >
               Criar conta
-            </Link>
+            </Button>
           </div>
         </Card>
 

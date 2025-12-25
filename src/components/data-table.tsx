@@ -57,7 +57,7 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
                 colSpan={table.getVisibleFlatColumns().length}
                 className="h-24 text-center"
               >
-                No results.
+                Não existem dados a serem exibidos.
               </TableCell>
             </TableRow>
           )}

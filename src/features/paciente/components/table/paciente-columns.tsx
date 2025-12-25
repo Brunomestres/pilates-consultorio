@@ -16,4 +16,8 @@ export const columns: ColumnDef<Pacientes>[] = [
     accessorKey: "phone",
     header: "Telefone",
   },
+  {
+    accessorKey: "cpf_cnpj",
+    header: "CPF/CNPJ",
+  },
 ];

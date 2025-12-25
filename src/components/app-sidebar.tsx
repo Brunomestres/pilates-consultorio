@@ -20,7 +20,7 @@ import {
 } from "./ui/dropdown-menu";
 
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 const items = [
   {
     title: "Paciente",
@@ -36,12 +36,13 @@ const items = [
 
 export function AppSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   const { data } = authClient.useSession();
   const signOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/signin"); // redirect to login page
+          router.push("/signin");
         },
       },
     });
@@ -64,7 +65,11 @@ export function AppSidebar() {
                 <SidebarMenuItem className="my-1" key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className="hover:bg-blue-100 dark:hover:bg-blue-900 data-[active=true]:bg-blue-200 dark:data-[active=true]:bg-blue-800 h-12 text-base"
+                    className={`hover:bg-blue-100 dark:hover:bg-blue-900 data-[active=true]:bg-blue-200 dark:data-[active=true]:bg-blue-800 h-12 text-base ${
+                      pathname === item.url
+                        ? "bg-blue-200 dark:bg-blue-800"
+                        : ""
+                    }`}
                   >
                     <Link href={item.url}>
                       <item.icon className="text-blue-600 dark:text-blue-400 h-5 w-5" />
@@ -79,17 +84,17 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-purple-100/50 dark:bg-purple-900/30">
+      <SidebarFooter className="bg-blue-100/50 dark:bg-blue-900/30">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="hover:bg-purple-200 dark:hover:bg-purple-800 h-14 text-base">
-                  <User2 className="text-purple-600 dark:text-purple-400 h-5 w-5" />
+                <SidebarMenuButton className="hover:bg-blue-100 dark:hover:bg-blue-900 h-10 text-base">
+                  <User2 className=" h-5 w-5" />
                   <span className="text-slate-700 dark:text-slate-200">
                     {data?.user.name || "Não informado"}
                   </span>
-                  <ChevronUp className="ml-auto text-purple-600 dark:text-purple-400 h-5 w-5" />
+                  <ChevronUp className="ml-auto h-5 w-5" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent

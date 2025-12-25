@@ -29,7 +29,7 @@ const items = [
   },
   {
     title: "Agendamento",
-    url: "#",
+    url: "/agendamentos",
     icon: Calendar,
   },
 ];

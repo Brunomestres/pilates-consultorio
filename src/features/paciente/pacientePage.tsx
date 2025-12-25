@@ -4,6 +4,7 @@ import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { PacienteTable } from "./components/table/paciente-table";
 import { Pacientes } from "@/app/(authenticated)/pacientes/action";
 import { columns } from "./components/table/paciente-columns";
+import { CreatePacienteModal } from "./components/modal/create-paciente-modal";
 
 export default function PacientePage({
   pacientes,
@@ -16,5 +17,10 @@ export default function PacientePage({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return <PacienteTable table={table} />;
+  return (
+    <>
+      <PacienteTable table={table} />
+      <CreatePacienteModal open={true} />
+    </>
+  );
 }

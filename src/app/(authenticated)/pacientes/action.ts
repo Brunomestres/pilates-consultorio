@@ -2,6 +2,7 @@
 
 import { db } from "@/config/db/drizzle";
 import { clients } from "@/db/schema";
+import { PacienteFormData } from "@/features/paciente/components/paciente-schema";
 import { auth } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
@@ -18,6 +19,10 @@ export type Pacientes = {
   created_at: Date;
   updated_at: Date;
 };
+
+export async function createPaciente(data: PacienteFormData) {
+  console.log("Creating paciente with data:", data);
+}
 
 export async function getPacientes(): Promise<Pacientes[]> {
   const data = await auth.api.getSession({

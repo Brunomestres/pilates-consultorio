@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const pacienteSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório"),
-  email: z.string().email("E-mail inválido").optional().or(z.literal("")),
+  email: z.email("E-mail inválido").optional().or(z.literal("")),
   phone: z
     .string()
     .min(10, "Telefone inválido")
@@ -20,7 +20,7 @@ export const pacienteSchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Data de nascimento inválida")
     .optional()
     .or(z.literal("")),
-  active: z.boolean().optional().default(true),
+  active: z.boolean(),
 });
 
 export type PacienteFormData = z.infer<typeof pacienteSchema>;

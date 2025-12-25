@@ -3,17 +3,28 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { PacienteTable } from "./components/table/paciente-table";
 import { Pacientes } from "@/app/(authenticated)/pacientes/action";
-import { columns } from "./components/table/paciente-columns";
+import { getColumns } from "./components/table/paciente-columns";
 import { CreatePacienteModal } from "./components/modal/create-paciente-modal";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { usePacienteStore } from "@/store/paciente-store";
+import { EditPacienteModal } from "./components/modal/edit-paciente-modal";
 
 export default function PacientePage({
   pacientes,
 }: {
   pacientes: Pacientes[];
 }) {
+  const { setPacienteEditar } = usePacienteStore();
+
+  const handleModalEdit = (paciente: Pacientes) => {
+    setPacienteEditar(paciente);
+    setOpenEditModal(true);
+  };
+
+  const columns = getColumns({ setPaciente: handleModalEdit });
   const [open, setOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
   const table = useReactTable({
     data: pacientes || [],
     columns: columns,
@@ -36,6 +47,7 @@ export default function PacientePage({
         <PacienteTable table={table} />
       </div>
       <CreatePacienteModal open={open} setOpen={setOpen} />
+      <EditPacienteModal open={openEditModal} setOpen={setOpenEditModal} />
     </>
   );
 }

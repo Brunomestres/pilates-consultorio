@@ -46,6 +46,35 @@ export async function createPaciente(data: PacienteFormData) {
   return paciente;
 }
 
+export async function updatePaciente(id: string, data: PacienteFormData) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user.studio_id) {
+    throw new Error("Sessão inválida");
+  }
+  try {
+    const paciente = await db
+      .update(clients)
+      .set({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        cpf_cnpj: data.cpf_cnpj,
+        birth_date: data.birth_date,
+        active: data.active ?? true,
+      })
+      .where(eq(clients.id, id));
+
+    revalidatePath("/pacientes");
+    return paciente;
+  } catch (error) {
+    console.error("Error updating paciente:", error);
+    throw new Error("Erro ao atualizar o paciente");
+  }
+}
+
 export async function getPacientes(): Promise<Pacientes[]> {
   const data = await auth.api.getSession({
     headers: await headers(),

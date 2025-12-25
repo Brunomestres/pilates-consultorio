@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const signinSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -28,7 +29,7 @@ type SigninFormValues = z.infer<typeof signinSchema>;
 
 export default function Page() {
   const [showPassword, setShowPassword] = useState(false);
-
+  const router = useRouter();
   const form = useForm<SigninFormValues>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -39,23 +40,26 @@ export default function Page() {
   });
 
   const onSubmit = async (data: SigninFormValues) => {
-    console.log("Login:", data);
-    await authClient.signIn.email({
+    const { error } = await authClient.signIn.email({
       email: data.email,
       password: data.password,
+      rememberMe: true,
     });
+    if (!error) {
+      router.push("/");
+    }
   };
 
   const register = async () => {
-    const { data, error } = await authClient.signUp.email({
+    await authClient.signUp.email({
       name: "John Doe", // required
       email: "john.doe2@example.com", // required
       password: "password1234", // required
       image: "https://example.com/image.png",
       studio_id: "7b7dc001-1dc2-4bbb-bd51-72af55c107d1",
+
       // callbackURL: "https://example.com/callback",
     });
-    console.log("Register:", { data, error });
   };
 
   return (

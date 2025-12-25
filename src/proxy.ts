@@ -9,11 +9,11 @@ export async function proxy(req: NextRequest) {
     headers: await headers(),
   });
   if (!session) {
-    return NextResponse.redirect(new URL("/sign-in", req.url));
+    return NextResponse.redirect(new URL("/signin", req.url));
   }
   const url = req.nextUrl;
 
-  if (url.pathname === "/") {
+  if (url.pathname === "/" && !session) {
     url.pathname = "/signin";
     return NextResponse.redirect(url);
   }
@@ -22,5 +22,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard"],
+  matcher: ["/"],
 };

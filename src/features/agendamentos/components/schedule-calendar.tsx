@@ -44,7 +44,7 @@ const CLASS_TYPES = [
 
 // Mock data para demonstração
 const MOCK_SCHEDULE = {
-  15: [
+  11: [
     {
       time: "08:00",
       type: 1,

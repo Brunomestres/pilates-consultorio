@@ -1,5 +1,7 @@
 import { AgendamentoPage } from "@/features/agendamentos/agendamentoPage";
+import { getResumeAppoimntments } from "./action";
 
-export default function Page() {
+export default async function Page() {
+  await getResumeAppoimntments();
   return <AgendamentoPage />;
 }

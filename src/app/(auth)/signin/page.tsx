@@ -73,7 +73,6 @@ export default function Page() {
           <h1 className="text-3xl font-bold text-foreground mb-2">
             Pilates Studio
           </h1>
-          <p className="text-muted-foreground">Bem-vindo de volta</p>
         </div>
 
         {/* Login Card */}
@@ -176,15 +175,6 @@ export default function Page() {
           </Form>
 
           {/* Signup Link */}
-          <div className="mt-6 text-center text-sm text-muted-foreground">
-            Não tem uma conta?{" "}
-            <Button
-              onClick={register}
-              className="text-accent hover:text-primary font-medium transition-colors"
-            >
-              Criar conta
-            </Button>
-          </div>
         </Card>
 
         {/* Footer Info */}

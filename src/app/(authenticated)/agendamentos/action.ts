@@ -9,15 +9,23 @@ import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { parseISO, setHours, setMinutes, setSeconds } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+
 export async function getResumeAppoimntments() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   try {
     const res = await db
-      .select({ id: appointments.id })
+      .select({
+        id: appointments.id,
+        date: appointments.date,
+        hour: appointments.hour,
+        client_name: clients.name,
+      })
       .from(appointments)
+      .leftJoin(clients, eq(appointments.client_id, clients.id))
       .where(eq(appointments.studio_id, session!.user.studio_id));
+    console.log("Fetched resume appointments:", res);
     return res;
   } catch (error) {
     console.log("Error fetching resume appointments:", error);

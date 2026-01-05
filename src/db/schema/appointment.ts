@@ -1,4 +1,11 @@
-import { pgTable, uuid, varchar, date, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  varchar,
+  date,
+  timestamp,
+  text,
+} from "drizzle-orm/pg-core";
 import { studios } from "./studios";
 import { relations } from "drizzle-orm";
 import { clients } from "./client";
@@ -13,13 +20,13 @@ export const appointments = pgTable("appointments", {
     .references(() => clients.id)
     .notNull(),
   date: date("date").notNull(),
-  hour: timestamp("hour").notNull(),
+  hour: date("hour").notNull(),
   duration_minutes: varchar("duration_minutes", { length: 10 }).notNull(),
   status: uuid("status")
     .notNull()
     .references(() => appointments_status.id)
     .notNull(),
-  created_by_user_id: uuid("created_by_user_id").notNull(),
+  created_by_user_id: text("created_by_user_id").notNull(),
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull(),
 });

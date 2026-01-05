@@ -134,27 +134,6 @@ export default function Page() {
 
               {/* Remember & Forgot Password */}
               <div className="flex items-center justify-between text-sm">
-                <FormField
-                  control={form.control}
-                  name="rememberMe"
-                  render={({ field }) => (
-                    <FormItem>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <FormControl>
-                          <input
-                            type="checkbox"
-                            checked={field.value}
-                            onChange={field.onChange}
-                            className="w-4 h-4 rounded border-border bg-input"
-                          />
-                        </FormControl>
-                        <span className="text-muted-foreground">
-                          Lembrar-me
-                        </span>
-                      </label>
-                    </FormItem>
-                  )}
-                />
                 <a
                   href="#"
                   className="text-accent hover:text-primary font-medium transition-colors"

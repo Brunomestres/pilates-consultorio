@@ -3,16 +3,27 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
-import { getPacientes } from "@/app/(authenticated)/agendamentos/action";
+import {
+  createAppointment,
+  getPacientes,
+} from "@/app/(authenticated)/agendamentos/action";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { appointmentSchema, AppointmentFormData } from "../appointment-schema";
 import {
   Select,
   SelectContent,
@@ -30,78 +41,133 @@ export function MakeAppointmentModal({
   open,
   onOpenChange,
 }: MakeAppointmentModalProps) {
+  console.log("[DEBUG] MakeAppointmentModal renderizou");
   const [pacientes, setPacientes] = useState<Pacientes[]>([]);
 
-  async function fetchData() {
-    const response = await getPacientes();
-    console.log("Pacientes:", response);
-    setPacientes(response);
-  }
-
   useEffect(() => {
-    async function fetchAndSetPacientes() {
-      await fetchData();
-    }
-    fetchAndSetPacientes();
+    getPacientes().then(setPacientes);
   }, []);
+
+  const form = useForm<AppointmentFormData>({
+    resolver: zodResolver(appointmentSchema),
+    defaultValues: {
+      paciente: "",
+      data: "",
+      hora: "",
+      duracao: "",
+    },
+  });
+  useEffect(() => {
+    console.log(form.formState.errors);
+    if (!open) {
+      form.reset();
+    }
+  }, [open, form]);
+  async function onSubmit(values: AppointmentFormData) {
+    console.log("[DEBUG] onSubmit foi chamado");
+    alert("onSubmit foi chamado");
+    console.log("[DEBUG] onSubmit values:", values);
+    await createAppointment(values);
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <form className="space-y-4 p-1">
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Novo Agendamento</DialogTitle>
-            <DialogDescription>
-              Preencha os dados para agendar uma aula.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4">
-            {/* Paciente */}
-            <div>
-              <Label htmlFor="paciente">Paciente</Label>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecionar o paciente" />
-                </SelectTrigger>
-                <SelectContent>
-                  {pacientes.map((paciente) => (
-                    <SelectItem key={paciente.id} value={paciente.name}>
-                      {paciente.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {/* Data */}
-            <div className="grid gap-2">
-              <Label htmlFor="data">Data</Label>
-              <Input id="data" name="data" type="date" />
-            </div>
-            {/* Hora */}
-            <div className="grid gap-2">
-              <Label htmlFor="hora">Hora</Label>
-              <Input id="hora" name="hora" type="time" />
-            </div>
-            {/* Duração */}
-            <div className="grid gap-2">
-              <Label htmlFor="duracao">Duração (minutos)</Label>
-              <Input
-                id="duracao"
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Novo Agendamento</DialogTitle>
+          <DialogDescription>
+            Preencha os dados para agendar uma aula.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 p-1"
+          >
+            <div className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="paciente"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Paciente</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecionar o paciente" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {pacientes.map((paciente) => (
+                            <SelectItem key={paciente.id} value={paciente.id}>
+                              {paciente.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="data"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="hora"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hora</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="duracao"
-                type="number"
-                min="1"
-                placeholder="50"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duração (minutos)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min={1}
+                        placeholder="50"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-          </div>
-          <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancelar</Button>
+              <Button variant="outline" type="button">
+                Cancelar
+              </Button>
             </DialogClose>
-            <Button type="submit">Agendar</Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              Agendar
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
     </Dialog>
   );
 }

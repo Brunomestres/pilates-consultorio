@@ -39,7 +39,7 @@ type MakeAppointmentModalProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export function MakeAppointmentModal({
+export function EditAppointmentModal({
   open,
   onOpenChange,
 }: MakeAppointmentModalProps) {

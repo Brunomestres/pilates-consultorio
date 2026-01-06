@@ -4,8 +4,12 @@ import { ScheduleCalendar } from "./components/schedule-calendar";
 import { Activity, Plus } from "lucide-react";
 import { MakeAppointmentModal } from "./components/modal/make-appointment";
 import { useState } from "react";
+import { ResumeAppointments } from "@/app/(authenticated)/agendamentos/action";
 
-export function AgendamentoPage() {
+type AgendamentoPageProps = {
+  appointments: ResumeAppointments[];
+};
+export function AgendamentoPage({ appointments }: AgendamentoPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <section className="flex flex-col gap-2">
@@ -35,7 +39,7 @@ export function AgendamentoPage() {
           </div>
         </div>
       </header>
-      <ScheduleCalendar />
+      <ScheduleCalendar appointments={appointments} />
       <MakeAppointmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </section>
   );

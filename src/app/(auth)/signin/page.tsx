@@ -18,6 +18,7 @@ import {
 import { Eye, EyeOff } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 
 const signinSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -52,11 +53,11 @@ export default function Page() {
 
   const register = async () => {
     await authClient.signUp.email({
-      name: "John Doe", // required
-      email: "john.doe2@example.com", // required
-      password: "password1234", // required
+      name: "Admin Test", // required
+      email: "admin@test.com", // required
+      password: "Test1234", // required
       image: "https://example.com/image.png",
-      studio_id: "7b7dc001-1dc2-4bbb-bd51-72af55c107d1",
+      studio_id: "ed31a110-12af-471d-8b44-ab928d725687",
 
       // callbackURL: "https://example.com/callback",
     });
@@ -132,27 +133,23 @@ export default function Page() {
                 )}
               />
 
-              {/* Remember & Forgot Password */}
-              <div className="flex items-center justify-between text-sm">
-                <a
-                  href="#"
-                  className="text-accent hover:text-primary font-medium transition-colors"
-                >
-                  Esqueceu a senha?
-                </a>
-              </div>
-
               {/* Submit Button */}
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
                 className="w-full bg-primary hover:bg-accent text-primary-foreground font-medium py-6 text-base transition-all duration-200"
               >
-                {form.formState.isSubmitting ? "Entrando..." : "Entrar"}
+                {form.formState.isSubmitting ? <Spinner /> : "Entrar"}
               </Button>
             </form>
           </Form>
-
+          {/* <button
+            type="button"
+            onClick={register}
+            className="mt-4 w-full bg-secondary hover:bg-secondary/80 text-primary-foreground font-medium py-6 text-base transition-all duration-200"
+          >
+            Criar conta de teste
+          </button> */}
           {/* Signup Link */}
         </Card>
 

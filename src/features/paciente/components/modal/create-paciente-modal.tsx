@@ -26,6 +26,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { maskCpfCnpj } from "@/utils/mask-cnpj-cpj";
 import { maskPhone } from "@/utils/mask-phone";
+import { toast } from "sonner";
 
 export function CreatePacienteModal({
   open,
@@ -47,9 +48,15 @@ export function CreatePacienteModal({
   });
 
   async function onSubmit(values: z.infer<typeof pacienteSchema>) {
-    await createPaciente(values);
-    form.reset();
-    setOpen(false);
+    try {
+      await createPaciente(values);
+      form.reset();
+      toast.success("Paciente criado com sucesso!");
+      setOpen(false);
+    } catch (error) {
+      console.error("Erro ao criar paciente:", error);
+      toast.error("Erro ao criar paciente. Tente novamente.");
+    }
   }
 
   return (

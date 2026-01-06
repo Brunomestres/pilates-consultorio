@@ -9,8 +9,18 @@ import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { parseISO, setHours, setMinutes, setSeconds } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import { revalidatePath } from "next/cache";
+import { StatusEnum } from "@/enum/status-enum";
 
-export async function getResumeAppoimntments() {
+export type ResumeAppointments = {
+  id: string;
+  date: string;
+  hour: string;
+  client_name: string | null;
+  status: string;
+};
+
+export async function getResumeAppoimntments(): Promise<ResumeAppointments[]> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -21,11 +31,11 @@ export async function getResumeAppoimntments() {
         date: appointments.date,
         hour: appointments.hour,
         client_name: clients.name,
+        status: appointments.status,
       })
       .from(appointments)
       .leftJoin(clients, eq(appointments.client_id, clients.id))
       .where(eq(appointments.studio_id, session!.user.studio_id));
-    console.log("Fetched resume appointments:", res);
     return res;
   } catch (error) {
     console.log("Error fetching resume appointments:", error);
@@ -57,7 +67,6 @@ export async function getPacientes() {
 }
 
 export async function createAppointment(data: AppointmentFormData) {
-  console.log("Creating appointment with data:", data);
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -84,6 +93,19 @@ export async function createAppointment(data: AppointmentFormData) {
     status: "1cb5e2de-4a1a-46b3-ac4e-19c708d2f873",
     created_by_user_id: session!.user.id,
   });
-
+  revalidatePath("/agendamentos");
   return newAppointment;
+}
+
+export async function canceledAppointmentStatus(appointmentId: string) {
+  try {
+    await db
+      .update(appointments)
+      .set({ status: StatusEnum.Cancelado })
+      .where(eq(appointments.id, appointmentId));
+    revalidatePath("/agendamentos");
+  } catch (error) {
+    console.log("Error updating appointment status:", error);
+    throw error;
+  }
 }

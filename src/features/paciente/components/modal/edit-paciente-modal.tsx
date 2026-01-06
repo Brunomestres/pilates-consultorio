@@ -27,6 +27,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { maskCpfCnpj } from "@/utils/mask-cnpj-cpj";
 import { maskPhone } from "@/utils/mask-phone";
 import { usePacienteStore } from "@/store/paciente-store";
+import { toast } from "sonner";
 
 export function EditPacienteModal({
   open,
@@ -49,10 +50,16 @@ export function EditPacienteModal({
   });
 
   async function onSubmit(values: z.infer<typeof pacienteSchema>) {
-    await updatePaciente(pacienteEditar.id, values);
-    setOpen(false);
-    clearPacienteEditar();
-    form.reset();
+    try {
+      await updatePaciente(pacienteEditar.id, values);
+      toast.success("Paciente atualizado com sucesso!");
+      setOpen(false);
+      clearPacienteEditar();
+      form.reset();
+    } catch (error) {
+      console.error("Erro ao atualizar paciente:", error);
+      toast.error("Erro ao atualizar paciente. Tente novamente.");
+    }
   }
 
   return (
